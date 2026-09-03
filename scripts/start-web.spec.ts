@@ -1,4 +1,4 @@
-import { existsSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { spawnSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
@@ -12,6 +12,15 @@ describe('Web launchers', () => {
     expect(existsSync(launcher)).toBe(true)
     expect(existsSync(batchLauncher)).toBe(true)
     expect(existsSync(shellLauncher)).toBe(true)
+  })
+
+  it('keeps the PowerShell launcher in UTF-8 BOM format for Windows PowerShell 5.1', () => {
+    expect(readFileSync(launcher).subarray(0, 3)).toEqual(Buffer.from([0xef, 0xbb, 0xbf]))
+  })
+
+  it('cleans listeners on the selected port before launching', () => {
+    expect(readFileSync(launcher, 'utf8')).toContain('Get-NetTCPConnection')
+    expect(readFileSync(shellLauncher, 'utf8')).toContain('lsof')
   })
 })
 

@@ -18,6 +18,10 @@ Windows and macOS/Linux users also need clear recovery messages when they skip a
 
 The launchers validate required sentinel artifacts for skip-build mode, support port and browser options, and print the exact tokenized URL with an explicit browser-opening instruction.
 
+The PowerShell launcher resolves the repository root as the parent of `deploy/` and uses UTF-8 BOM encoding so Windows PowerShell 5.1 parses its Chinese messages correctly.
+
+Before launching, the Windows and macOS/Linux launchers terminate every process listening on the selected port so repeated starts do not fail on a stale server. This is intentionally destructive to other local services using that port and is documented as a caller responsibility.
+
 README language pairs document the platform launchers and their options; tests verify all launcher files are present and the Windows launcher rejects invalid ports before a build or server launch.
 
 ## Alternatives considered

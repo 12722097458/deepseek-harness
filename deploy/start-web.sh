@@ -25,6 +25,23 @@ fail() {
   exit 1
 }
 
+stop_port_listeners() {
+  local listener_pids
+  command -v lsof >/dev/null 2>&1 || fail "lsof was not found. Install lsof or free port $port manually."
+  listener_pids="$(lsof -nP -iTCP:"$port" -sTCP:LISTEN -t 2>/dev/null || true)"
+  if [[ -z "$listener_pids" ]]; then
+    return
+  fi
+  while IFS= read -r process_id; do
+    [[ "$process_id" =~ ^[0-9]+$ ]] || continue
+    [[ "$process_id" == "$$" ]] && continue
+    printf 'Stopping process PID=%s listening on port %s.\n' "$process_id" "$port"
+    kill "$process_id" 2>/dev/null || {
+      kill -0 "$process_id" 2>/dev/null && fail "Could not stop process PID=$process_id on port $port."
+    }
+  done <<< "$listener_pids"
+}
+
 while (($# > 0)); do
   case "$1" in
     --skip-build|-SkipBuild|-NoBuild)
@@ -76,6 +93,7 @@ else
   printf 'Build complete.\n'
 fi
 
+stop_port_listeners
 printf 'Starting Web service. Press Ctrl+C to stop it.\n'
 printf 'Open the complete tokenized URL printed below in your browser.\n'
 

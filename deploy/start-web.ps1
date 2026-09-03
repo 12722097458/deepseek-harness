@@ -1,4 +1,4 @@
-#!/usr/bin/env pwsh
+﻿#!/usr/bin/env pwsh
 
 <#
   Windows PowerShell launcher for the source-checkout Web UI.
@@ -21,7 +21,7 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-$repositoryRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+$repositoryRoot = Split-Path -Parent $PSScriptRoot
 
 function Invoke-Pnpm {
   param(
@@ -32,6 +32,20 @@ function Invoke-Pnpm {
   & pnpm @Arguments
   if ($LASTEXITCODE -ne 0) {
     throw "pnpm $($Arguments -join ' ') 失败，退出码：$LASTEXITCODE"
+  }
+}
+
+function Stop-PortListeners {
+  param(
+    [Parameter(Mandatory = $true)]
+    [int]$Port
+  )
+
+  $connections = @(Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue)
+  $processIds = @($connections | Select-Object -ExpandProperty OwningProcess -Unique | Where-Object { $_ -gt 0 })
+  foreach ($processId in $processIds) {
+    Write-Host "正在终止占用端口 $Port 的进程 PID=$processId。"
+    Stop-Process -Id $processId -Force -ErrorAction Stop
   }
 }
 
@@ -67,6 +81,7 @@ try {
     Write-Host '构建完成。'
   }
 
+  Stop-PortListeners -Port $Port
   Write-Host '正在启动 Web 服务。按 Ctrl+C 可停止服务。'
   Write-Host '启动成功后，请在浏览器打开脚本打印的“前端打开地址”。'
 

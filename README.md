@@ -56,7 +56,7 @@ chmod +x deploy/start-web.sh
 ./deploy/start-web.sh --open-browser
 ```
 
-The script builds missing artifacts, starts the Web service, and prints the complete tokenized URL with an explicit instruction to open it in a browser. Paste that URL into a browser to open the frontend. Add `-SkipBuild` when artifacts already exist, `-OpenBrowser` to open the browser automatically, or `-Port 3080` to select a port.
+The script builds missing artifacts, terminates every process listening on the selected port before starting the Web service, and prints the complete tokenized URL with an explicit instruction to open it in a browser. Paste that URL into a browser to open the frontend. Add `-SkipBuild` when artifacts already exist, `-OpenBrowser` to open the browser automatically, or `-Port 3080` to select a port. Port cleanup can terminate another local service, so confirm that the selected port belongs to this project.
 
 ## Community and support
 

@@ -2,5 +2,5 @@
 # side as of the last confirmed-consistent state. Both languages carry equal authority;
 # after editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write .agents/notes/implemented/process/2026-09-03-powershell-web-launcher.md
-2026-09-03-powershell-web-launcher.md: db5bc72b2d1090bfaef61e14a97f60a00f9537d6
-2026-09-03-powershell-web-launcher.zh.md: c82aa95bc20c241ab5d267c2a4089ce40e2dc4ce
+2026-09-03-powershell-web-launcher.md: c8ea3a5662eb4b639132485d5c3ade0eeb6ad3a2
+2026-09-03-powershell-web-launcher.zh.md: c2a497d9c0704085af3acc861e6ccbea02bbd9e4
