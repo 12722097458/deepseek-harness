@@ -40,6 +40,24 @@ pnpm dsh web
 
 `pnpm run build` prepares the repository artifacts. `pnpm dsh web` uses those built artifacts without rebuilding.
 
+Windows PowerShell users can run the guided launcher, which checks the build and prints the browser URL:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\deploy\start-web.ps1
+```
+
+You can also double-click `deploy\start-web.bat`, or run `.\deploy\start-web.bat -OpenBrowser` in a terminal.
+
+macOS/Linux users can run the following from the repository root:
+
+```bash
+chmod +x deploy/start-web.sh
+./deploy/start-web.sh --open-browser
+```
+
+The script builds missing artifacts, starts the Web service, and prints the complete tokenized URL with an explicit instruction to open it in a browser. Paste that URL into a browser to open the frontend. Add `-SkipBuild` when artifacts already exist, `-OpenBrowser` to open the browser automatically, or `-Port 3080` to select a port.
+
 ## Community and support
 
 - Submit feedback or bug reports through [GitHub Discussions](https://github.com/deepseek-ai/deepseek-harness/discussions).

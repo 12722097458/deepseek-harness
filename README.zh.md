@@ -44,6 +44,24 @@ pnpm dsh web
 
 `pnpm run build` 会准备仓库产物。`pnpm dsh web` 会直接使用这些已构建产物，不会重新构建。
 
+Windows PowerShell 用户可以运行带有构建检查和地址提示的启动脚本：
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\deploy\start-web.ps1
+```
+
+也可以双击 `deploy\start-web.bat`，或在终端运行 `.\deploy\start-web.bat -OpenBrowser`。
+
+macOS/Linux 用户可以在仓库根目录运行：
+
+```bash
+chmod +x deploy/start-web.sh
+./deploy/start-web.sh --open-browser
+```
+
+脚本会先构建缺失产物，再启动 Web 服务，并打印“前端已启动，请在浏览器打开”的完整地址；将该地址粘贴到浏览器地址栏即可打开前端。已有产物时可添加 `-SkipBuild`，需要自动打开浏览器时可添加 `-OpenBrowser`，端口可通过 `-Port 3080` 指定。
+
 ## 社区与支持
 
 - 通过 [GitHub Discussions](https://github.com/deepseek-ai/deepseek-harness/discussions) 提交反馈或 bug 报告。
