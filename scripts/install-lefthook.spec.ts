@@ -359,6 +359,15 @@ describe('worktree-local Lefthook installer', { timeout: 90_000 }, () => {
     expect(existsSync(lockPath)).toBe(false)
   })
 
+  it.skipIf(process.platform !== 'win32')('accepts Windows fstat and lstat identity metadata', async () => {
+    const fixture = createFixture()
+
+    const result = await runInstaller(fixture, fixture.main)
+
+    expect(result.status, result.stderr).toBe(0)
+    expect(existsSync(installLockPath(fixture))).toBe(false)
+  })
+
   it('repairs its owned absolute hook path after the checkout moves', async () => {
     const fixture = createFixture()
     const oldRoot = fixture.main
